@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CarePlus Hospital</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background: #7ac2c4;
+        }
+
+        header {
+            background: #0a9396;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+
+        form {
+            background: white;
+            padding: 20px;
+            display: inline-block;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px gray;
+        }
+
+        input, select {
+            margin: 10px;
+            padding: 10px;
+            width: 220px;
+        }
+
+        button {
+            background: #0a9396;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .output {
+            margin-top: 20px;
+            color: green;
+            font-weight: bold;
+        }
+
+        .appointments {
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            margin: 10px auto;
+            padding: 10px;
+            width: 250px;
+            border-radius: 8px;
+            box-shadow: 1px 1px 5px gray;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>CarePlus Hospital</h1>
+</header>
+
+<div class="container">
+    <h2>Book Appointment</h2>
+
+    <form id="form">
+        <input type="text" id="name" placeholder="Enter Name" required><br>
+        <input type="email" id="email" placeholder="Enter Email" required><br>
+
+        <select id="doctor">
+            <option>Cardiologist</option>
+            <option>Neurologist</option>
+            <option>Orthopedic</option>
+        </select><br>
+
+        <input type="date" id="date" required><br>
+
+        <button type="submit">Book Now</button>
+    </form>
+
+    <div class="output" id="msg"></div>
+
+    <div class="appointments" id="list">
+        <h3>Appointments</h3>
+    </div>
+</div>
+
+<script>
+let form = document.getElementById("form");
+let msg = document.getElementById("msg");
+let list = document.getElementById("list");
+
+// Load saved data
+let data = JSON.parse(localStorage.getItem("appointments")) || [];
+display();
+
+form.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let appointment = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        doctor: document.getElementById("doctor").value,
+        date: document.getElementById("date").value
+    };
+
+    data.push(appointment);
+    localStorage.setItem("appointments", JSON.stringify(data));
+
+    msg.innerText = "✅ Appointment Booked Successfully!";
+    form.reset();
+
+    display();
+});
+
+function display(){
+    list.innerHTML = "<h3>Appointments</h3>";
+    data.forEach(a => {
+        list.innerHTML += `
+            <div class="card">
+                <b>${a.name}</b><br>
+                ${a.doctor}<br>
+                ${a.date}
+            </div>
+        `;
+    });
+}
+</script>
+
+</body>
+</html>
